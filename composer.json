@@ -1,0 +1,23 @@
+{
+    "name": "eddiriarte/battleship",
+    "description": "A simple experiment with PHP",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Eduardo Iriarte",
+            "email": "eddiriarte@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Battleship\\": [ "src/", "tests/" ]
+        }
+    },
+    "require": {
+        "michelf/php-markdown": "^1.6",
+        "twig/twig": "~1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "5.4.*"
+    }
+}

@@ -1,0 +1,58 @@
+h1 { text-align:center; margin-bottom:20px;}
+.anmerkungen { width:800px; margin:auto; }
+
+.battlefield {
+    margin: 30px auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.battlefield tr, .battlefield td {
+    margin: 0px;
+    padding: 0px;
+    outline: 0px;
+    line-height: 0;
+    border: none;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.battlefield td {
+    border: 1px solid #2980b9;
+}
+
+.coordinate {
+    width: 40px;
+    height: 40px;
+    margin: 0px;
+    outline: 0px;
+    border: none;
+    background: #1abc9c;
+    cursor: url(/assets/img/test-pointer.ico);
+}
+
+.coordinate.shot {
+    background: #f1c40f;
+}
+
+.coordinate.ship {
+    background: #9b59b6;
+}
+
+.coordinate.ship.shot {
+    background: #e74c3c;
+}
+
+.coordinate:hover, .coordinate:focus {
+    background: #222;
+}
+
+.coordinate.fired {
+    background: #222;
+}
+
+.coordinate.gotcha {
+    background: #222;
+}
+
+
