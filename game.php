@@ -1,9 +1,41 @@
 <?php
     require_once 'vendor/autoload.php';
 
-    use \Michelf\Markdown;
+    session_start();
 
-    ?>
+    use \Michelf\Markdown;
+    use \Battleship\Game;
+
+    if (isset($_POST['username'])) {
+        $_SESSION['identifier'] = $_POST['username'];
+    }
+
+    function loadUsername()
+    {
+        return $_SESSION['identifier'];
+    }
+
+    function loadGame()
+    {
+        $identifier = loadUsername();
+
+        if (isset($_SESSION[$identifier])) {
+            return unserialize($_SESSION[$identifier]);
+        }
+      
+        return new Game($identifier);
+    }
+
+    $game = loadGame();
+
+    if (isset($_POST['enemy'])) {
+        $coordinate = explode('_', array_keys($_POST['enemy'])[0]);
+        $game->playerShot($coordinate[0], $coordinate[1]);
+    }
+
+
+    $_SESSION[loadUsername()] = serialize($game);
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,24 +55,10 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="gigant">Battleship</h1>
+        <h1>Battleship</h1>
 
-        <img class="img-center" src="assets/img/battleship.png" alt="battleship">
-
-        <form action="game.php" method="POST">
-            <div class="play">
-                <div class="form-input">
-                    <input type="text" value="" placeholder="username" name="username" required>
-                </div>
-
-                <button type="submit" class="btn btn-play">Play</button>
-            </div>
-        </form>
-    </div>
-    <div class="container dark">
-        <div class="description">
-            <?= Markdown::defaultTransform(file_get_contents("README.md")) ?>
-        </div>
+        <?= $game->render() ?>
+        
     </div>
 </body>
 </html>

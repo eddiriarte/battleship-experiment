@@ -2,6 +2,8 @@
 
 namespace Battleship\Board;
 
+use Battleship\Twig\TemplateManager;
+
 class Ship
 {
     private $type;
@@ -54,6 +56,38 @@ class Ship
         return count($this->fields) == count($this->hits);
     }
 
+    public function isFirst($x, $y)
+    {
+        $list = array_keys($this->fields);
+        if (array_search($x . '_' . $y, $list) === 0) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    public function isLast($x, $y)
+    {
+        $list = array_keys($this->fields);
+        if (array_search($x . '_' . $y, $list) === (count($list) - 1)) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    public function isVertical()
+    {
+        $list = array_keys($this->fields);
+        $first = explode('_', $list[0]);
+        $last = explode('_', $list[count($list)-1]);
+
+        // is vertical
+        return $first[0] == $last[0] && $first[1] != $last[1];
+    }
+
+
+
     public function notifyShot($x, $y)
     {
         $isHit = $this->hasField($x, $y);
@@ -64,21 +98,19 @@ class Ship
         return $isHit;
     }
 
-    public function getHTML($x, $y, $form = 'enemy')
+    public function render($x, $y, $form = 'enemy')
     {
-        $classes = ["coordinate"];
-
-        if ($this->isHit($x, $y)) {
-            array_push($classes, "ship", "shot");
-            return '<div class="coordinate ship shot"></div>';
-        }
-
-        if ($this->isSunk()) {
-            array_push($classes, "ship-" . $this->symbol, "sunk");
-            return '<div class="' . join(' ', $classes) . '"></div>';
-        }
-
-        $classes[] = $form == 'enemy' ? '' : 'ship';
-        return '<button class="' . join(' ', $classes) . '" type="submit" name="' . $form . '[' . $x . '_' . $y . ']" />';
+        return TemplateManager::instance()->render('ship-tile.twig.html', [
+            'isClickable' => $form == 'enemy' && !$this->isHit($x, $y),
+            'isVisible' => $form != 'enemy' || $this->isSunk(),
+            'isFirst' => $this->isFirst($x, $y),
+            'isLast' => $this->isLast($x, $y),
+            'isVertical' => $this->isVertical(),
+            'isHit' => $this->isHit($x, $y),
+            'collection' => $form,
+            'name' => $x . '_' . $y,
+            'x' => $x,
+            'y' => $y,
+        ]);
     }
 }

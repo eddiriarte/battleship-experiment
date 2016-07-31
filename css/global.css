@@ -1,58 +1,230 @@
-h1 { text-align:center; margin-bottom:20px;}
-.anmerkungen { width:800px; margin:auto; }
+html, body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+}
+
+h1, h2, h3, h4 {
+    text-align: center;
+}
+
+.container {
+    overflow: auto;
+    display: block;
+    min-height: 100vh;
+}
+
+.container.dark {
+    background: #bdc3c7;
+}
+
+.form-input {
+    margin: 10px auto;
+}
+
+.form-input input[type="text"] {
+    width: 97%;
+    line-height: 22px;
+    font-size: 18px;
+    border: 2px solid #f39c12;
+    padding: 4px;
+    text-align: center;
+}
+
+.form-input input[type="text"]:focus {
+    outline: 0;
+    border: 2px solid #e67e22;
+}
+
+
+.gigant {
+    font-size: 5em;
+    font-weight: 200;
+    text-transform: uppercase;
+}
+
+.img-center {
+    margin: 60px auto;
+    display: block;
+}
+
+.gameboard {
+    width: 95%;
+    display: flex;
+    justify-content: space-between;
+    border: 4px solid #2c3e50;
+    border-radius: 10px;
+    margin: 20px auto;
+}
+
+#enemy {
+    width: 45%;
+    background: #eddff3;
+    border: 1px solid #2c3e50;
+    border-width: 0 5px;
+}
+
+#player {
+    width:30%;
+}
+
+#info {
+    width:25%;
+}
 
 .battlefield {
     margin: 30px auto;
     border-collapse: collapse;
     border-spacing: 0;
+    width: 90%;
 }
 
-.battlefield tr, .battlefield td {
-    margin: 0px;
-    padding: 0px;
-    outline: 0px;
-    line-height: 0;
-    border: none;
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-
-.battlefield td {
-    border: 1px solid #2980b9;
+.sea-row {
+    position: relative;
+    float: none;
+    display: flex;
 }
 
 .coordinate {
-    width: 40px;
-    height: 40px;
-    margin: 0px;
-    outline: 0px;
-    border: none;
+    width: calc(100%/11);
+    outline: 0;
+    border: 1px solid #148a73;
+    border-width: 2px 0 0 2px;
     background: #1abc9c;
-    cursor: url(/assets/img/test-pointer.ico);
+    position: relative;
 }
 
-.coordinate.shot {
-    background: #f1c40f;
+.coordinate.right {
+    border-right-width: 2px;
 }
 
-.coordinate.ship {
-    background: #9b59b6;
+.coordinate.bottom {
+    border-bottom-width: 2px;
 }
 
-.coordinate.ship.shot {
-    background: #e74c3c;
+.coordinate:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
 }
 
 .coordinate:hover, .coordinate:focus {
-    background: #222;
+    background: #148a73;
 }
 
-.coordinate.fired {
-    background: #222;
+.ship {
+    background-size: contain;
+    width: 100%;
+    height: 100%;
 }
 
-.coordinate.gotcha {
-    background: #222;
+.ship.horizontal {
+    background-image: url("/assets/img/ship-horizontal.png");
 }
 
+.ship.vertical {
+    background-image: url("/assets/img/ship-vertical.png");
+}
+
+.ship.first.horizontal {
+    background-image: url("/assets/img/ship-begin-horizontal.png");
+}
+
+.ship.last.horizontal {
+    background-image: url("/assets/img/ship-end-horizontal.png");
+}
+
+.ship.first.vertical {
+    background-image: url("/assets/img/ship-begin-vertical.png");
+}
+
+.ship.last.vertical {
+    background-image: url("/assets/img/ship-end-vertical.png");
+}
+
+.target {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    outline: 0;
+    background: #1abc9c;
+}
+
+.target:hover, .target:focus {
+    background: #148a73;
+}
+
+.shot {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0; left: 0;
+    background: url(/assets/img/shot-fail.png);
+    background-size: contain;
+}
+
+.shot.hit {
+    background: url(/assets/img/shot-hit.png);
+    background-size: contain;
+}
+
+.coordinate.legend {
+    background: none;
+    border: none;
+}
+
+.coordinate.legend span {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    margin: 25% auto;
+}
+
+.message {
+    margin: 5px;
+    padding: 5px;
+}
+
+.message.info {
+    background: #cde1f5;
+}
+
+.message.success {
+    background: #bdf9ed;
+}
+
+.message.error {
+    background: #f7c3be;
+}
+
+.play {
+    width: 400px;
+    margin: 60px auto;
+    padding: 20px;
+    text-align: center;
+    border: 5px solid #2c3e50;
+    border-radius: 10px;
+}
+
+
+
+.btn {
+    border: 0;
+    outline: 0;
+    padding: 10px 30px;
+    margin: 10px auto;
+    color: #2c3e50;
+    background: #f1c40f;
+    font-size: 20px;
+    font-weight: 900;
+}
+
+a.btn {
+    text-decoration: none;
+}
+
+.description {
+    text-align: center;
+}
 

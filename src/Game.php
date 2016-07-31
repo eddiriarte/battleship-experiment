@@ -4,6 +4,8 @@ namespace Battleship;
 
 use Battleship\AI\ArtificialIntelligence;
 use Battleship\Board\Board;
+use Battleship\Info\Message;
+use Battleship\Twig\TemplateManager;
 
 /**
  * 
@@ -23,13 +25,16 @@ class Game
         $this->ai = ArtificialIntelligence::build($this->level, $width, $height);
         $this->player = new Board($width, $height, 'player');
         $this->enemy = new Board($width, $height, 'enemy');
-        $this->messages = [ 0 => [ "Game \'$identifier\' has been created." ] ];
+        $this->messages = [ 0 => [ new Message("Game '$identifier' has been created.") ] ];
     }
 
-    public function getHTML()
+    public function render()
     {
-        return '<div id="player" class="col-md-6"><h4>PLAYER</h4>' . $this->player->getHTML() . '</div>'
-        . '<div id="enemy" class="col-md-6"><h4>ENEMY</h4>' . $this->enemy->getHTML() . '</div>';
+        return TemplateManager::instance()->render('game.twig.html', [
+            'messages' => $this->getMessages(),
+            'enemy' => $this->enemy,
+            'player' => $this->player,
+        ]);
     }
 
     public function getMessages($index = false)
@@ -53,10 +58,11 @@ class Game
     public function playerShot($x, $y)
     {
         $hasNextTurn = $this->enemy->fire($x, $y);
-        $this->appendMessage("Player has shot to: [$x,$y]. " . ($hasNextTurn ? "SUCCESS" : "FAILURE"), count($this->messages));
+        $msg = new Message("Player has shot to: " . chr(64+$y) . "-$x." . ($hasNextTurn ? " It was a hit!" : ""), $hasNextTurn ? "success" : "error");
+        $this->appendMessage($msg, count($this->messages));
 
         if ($this->enemy->allSunk()) {
-            $this->appendMessage("Player has won!");
+            $this->appendMessage(new Message("Player has won!", 'success'));
             return $this->playerWins();
         }
 
@@ -71,15 +77,15 @@ class Game
             $this->ai->notify($shot, $wasHit);
             $enemyHasNextTurn = $wasHit;
 
-            $this->appendMessage("Enemy has shot to: [$x,$y]. " . ($enemyHasNextTurn ? "SUCCESS" : "FAILURE"));
+            $msg = new Message("Enemy has shot to: " . chr(64+$shot['y']) . "-" . $shot['x'] . "." . ($enemyHasNextTurn ? " It was a hit!" : ""), $enemyHasNextTurn ? "error" : "info");
+            $this->appendMessage($msg);
             
             if ($this->player->allSunk()) {
-                $this->appendMessage("Enemy has won!");
+                $this->appendMessage(new Message("Enemy has won!", "error"));
                 return $this->enemyWins();
             }
         }
         
-
         return $this->nextPlayer();
     }
 

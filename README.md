@@ -1,2 +1,4 @@
-Battleship
-==========
+PHP Battleship
+==============
+
+by ```eddiriarte```

@@ -1,0 +1,29 @@
+<div class="gameboard">
+    <section id="player" class="col-md-6">
+        <h4>Your Battleships</h4>
+        {{ player.render() | raw }}
+        <div class="ship-list"></div>
+    </section>
+
+
+
+    <section id="enemy" class="col-md-6">
+        <h4>Your Enemy</h4>
+        <form action="" method="post">
+            {{ enemy.render() | raw }}
+        </form>
+    </section>
+
+    <section id="info">
+        <div>
+            <h4>Status</h4>
+            {% for message in messages %}
+            <div class="message {{message.type}}">{{ message.message }}</div>
+            {% endfor %}
+        </div>
+
+        <div>
+            <a class="btn btn-exit" href="/exit.php">Leave</a>
+        </div>
+    </section>
+</div>

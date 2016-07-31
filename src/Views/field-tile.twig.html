@@ -1,0 +1,6 @@
+{% if isClickable %}
+    <button class="target" name="{{ collection }}[{{ name }}]" type="submit" value="SHOT"></button>
+{% endif %}
+{% if isHit %}
+    <div class="shot"></div>
+{% endif %}

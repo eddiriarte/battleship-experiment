@@ -1,0 +1,26 @@
+<div class="battlefield">
+    {% for row in 1..board.height %}
+    {% set vertical = row == 1 ? ' top' : (row == board.height ? ' bottom' : '') %}
+    <div class="sea-row sea-row-{{ row }}">
+        <div class="coordinate legend row">
+            <span>{{ board.rowName(row) }}</span>
+        </div>
+        {% for column in 1..board.width %}
+        {% set horizontal = column == 1 ? ' left' : (column == board.width ? ' right' : '') %}
+        <div class="coordinate{{ vertical }}{{ horizontal }}">
+            {{ board.renderCell(column, row, field) | raw }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+    <div class="sea-row sea-row-legend">
+        <div class="coordinate legend row">
+            <span>&nbsp;</span>
+        </div>
+        {% for column in 1..board.width %}
+        <div class="coordinate legend column">
+            <span>{{ column }}</span>
+        </div>
+        {% endfor %}
+    </div>
+</div>

@@ -4,6 +4,7 @@ namespace Battleship\Board;
 
 use Battleship\Board\Ship;
 use Battleship\Board\BoardHelper;
+use Battleship\Twig\TemplateManager;
 
 class Board
 {
@@ -20,6 +21,16 @@ class Board
         $this->player = $player;
         $this->shots = [];
         $this->ships = BoardHelper::inititalizeBoard($width, $height);
+    }
+
+    public function getHeight()
+    {
+        return $this->height;
+    }
+
+    public function getWidth()
+    {
+        return $this->width;
     }
 
     public function fire($x, $y)
@@ -45,31 +56,58 @@ class Board
         return true;
     }
 
-    public function getHTML()
-    {
-        $container = '';
-        for ($y=1; $y <= $this->height; $y++) {
-            $row = [];
-            for ($x=1; $x <= $this->width; $x++) {
-                $row[$x] = $this->getCellHTML($x, $y, $this->player);
-            }
-            $container .= ('<tr><td>' . join('</td><td>', $row) . '</td></tr>');
-        }
-        return  '<table class="battlefield">' . $container . '</table>';
-    }
-
-    protected function getCellHTML($x, $y, $form = 'enemy')
+    public function hasShipAt($x, $y)
     {
         foreach ($this->ships as $ship) {
             if ($ship->hasField($x, $y)) {
-                return $ship->getHTML($x, $y, $form);
+                return true;
             }
         }
 
-        if (array_key_exists($x . '_' . $y, $this->shots) || $this->allSunk()) {
-            return '<div class="coordinate shot"></div>';
+        return false;
+    }
+
+    public function getShipAt($x, $y)
+    {
+        foreach ($this->ships as $ship) {
+            if ($ship->hasField($x, $y)) {
+                return $ship;
+            }
         }
-        
-        return '<button class="coordinate" type="submit" name="' . $form . '[' . $x  . '_' . $y . ']" value=""></button>';
+
+        return false;
+    }
+
+    public function hasShotAt($x, $y)
+    {
+        return array_key_exists($x . '_' . $y, $this->shots);
+    }
+
+    public function rowName($number)
+    {
+        return chr(64 + $number);
+    }
+
+    public function render()
+    {
+        return  TemplateManager::instance()->render('board.twig.html', [
+            'board' => $this
+        ]);
+    }
+
+    public function renderCell($x, $y, $form = 'enemy')
+    {
+        if ($this->hasShipAt($x, $y)) {
+            return $this->getShipAt($x, $y)->render($x, $y, $this->player);
+        }
+
+        return  TemplateManager::instance()->render('field-tile.twig.html', [
+            'isClickable' => $this->player == 'enemy' && !$this->hasShotAt($x, $y) && !$this->allSunk(),
+            'isHit' => $this->hasShotAt($x, $y),
+            'collection' => $this->player,
+            'name' => $x . '_' . $y,
+            'x' => $x,
+            'y' => $y,
+        ]);
     }
 }
